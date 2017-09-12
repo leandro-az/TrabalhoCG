@@ -1,5 +1,6 @@
 from graphics import *
 from estruturas import *
+import time
 
 def multiplicaMatriz(A,B):
     linhaA=len(A)
@@ -50,8 +51,27 @@ def desenhaSetaD(janela):
 def desenhaPontoPassoAPasso():
     pass
 
-def desenhaRetasPassoAPasso():
-    pass
+def desenhaRetasPassoAPasso(janela):
+    pontoAnt=Point(vet[0][0]+x0,vet[0][1]+y0)
+    pontoAtual=Point(0,0)
+    pt = Circle(pontoAtual, 3)
+    for i in range(len(vet)):
+        pt.setFill("yellow")
+        pontoAtual=Point(vet[i][0]+x0,vet[i][1]+y0)
+        pt= Circle(pontoAtual,3)
+        if(i>0):
+           pt.setFill("red")
+        pt.draw(janela)
+        time.sleep(1)
+        if(i!=0):
+            reta=Line(pontoAnt,pontoAtual)
+            reta.draw(janela)
+            time.sleep(1)
+            pontoAnt=pontoAtual
+    pt.setFill("yellow")
+    pontoAnt = Point(vet[0][0] + x0, vet[0][1] + y0)
+    reta = Line(pontoAnt, pontoAtual)
+    reta.draw(janela)
 
 def desenhaPlanosPassoAPasso():
     pass
@@ -79,9 +99,10 @@ def main():
     janela.setBackground(color_rgb(255,255,255))
 
 
+
     resp=True
     while(resp):
-     desenhaPontos(janela)
+     desenhaRetasPassoAPasso(janela)
      desenhaSetaE(janela)
      desenhaSetaD(janela)
      click = janela.getMouse().clone()
