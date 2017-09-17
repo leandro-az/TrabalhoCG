@@ -26,6 +26,13 @@ matProPZ=[[1,0,0,0],
           [0,0,0,0],
           [0,0,0,1]]
 
+matProXYUmPontodeFuga=[[1,0,0,0],   # acertar
+                       [0,1,0,0],
+                       [0,0,0,(1/30)*(-1)],
+                       [0,0,0,1]]
+
+
+
 def multiplicaMatriz(A,B):
     linhaA=len(A)
     colunaA=len(A[0])
@@ -71,4 +78,11 @@ def fazRotacaoEmZ(mat,angulo):
 
     return multiplicaMatriz(mat, matRotZ)
 
+def montaCabinetModificada(mat,angulo):
 
+    matCab = [[1, 0, 0, 0],  # acertar
+                               [0, 1, 0, 0],
+                               [30*math.cos(angulo), 30*math.sin(angulo), 0, 0],
+                               [0, 0, 0, 1]]
+
+    return multiplicaMatriz(mat, matCab)

@@ -175,12 +175,15 @@ def main():
 
     resp=True
     while(resp):
-     mat=fazRotacaoEmX(matOri,20)
-     mat = fazRotacaoEmY(mat, 90)
+    # mat=fazRotacaoEmX(matOri,20)
+    # mat = fazRotacaoEmY(mat, 90)
+     mat=montaCabinetModificada(matOri,25)
 
      desenhaRetasPassoAPasso(janela,mat)
 
      desenhaPlanosPassoAPasso(janela,mat)
+
+
 
      desenhaSetaE(janela)
      desenhaSetaD(janela)
