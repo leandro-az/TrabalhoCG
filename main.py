@@ -2,7 +2,7 @@
 
 from graphics import *
 from estruturas import *
-import random, time
+import random, time, decimal
 
 
 def desenhaPontos(janela):
@@ -21,6 +21,7 @@ def desenhaSetaE(janela):
     #    print(click.getX())
      #   setaE.undraw()
      #   return False
+    return setaE
 
 def desenhaSetaD(janela):
     setaD = Polygon(Point(70, 60), Point(40, 40), Point(70, 20))
@@ -31,6 +32,7 @@ def desenhaSetaD(janela):
        # print(click.getX())
       #  setaE.undraw()
       #  return False
+    return setaD
 
 def desenhaPontoPassoAPasso():
     pass
@@ -146,53 +148,91 @@ def desenhaPlanosPassoAPasso(janela,matOpera):
 
 
 
+def desenhaCoordenadasNaTela(janela,matOpera,tipo):
+
+
+     dx= 4
+     dy=120
+     listaP =[]
+     for i in range(len(matOpera)):
+
+       listaP.append([" "]*2)
+
+       # desenha os quadrados para clique
+       quadrado=Rectangle(Point(dx,dy),Point(dx+20,dy+20))
+       quadrado.setFill("Black")
+       quadrado.draw(janela)
+
+       listaP[i][0]=Point(dx,dy)
+       listaP[i][1] = Point(dx+20,dy+20)
 
 
 
-def colorePlanosPassoAPasso():
-    pass
+       if(tipo=="C"):
+         # desenha o valor dos pontos ao lado do quadrado
+           frase = " (" + str(float(round(matOpera[i][0]))) +"," + str(float(round(matOpera[i][1])*(-1))) + " )"
+       else:
+           frase = " (" + str(float(round(matOpera[i][0]))) + "," + str(float(round(matOpera[i][1]))) + " )"
+       texto=Text(Point(quadrado.getP2().x+50, dy+10),frase )
+       texto.setFill("Black")
+       texto.draw(janela)
 
-def desenhaPespectiva1PontoDeFuga():
-    pass
+       dy=dy+35
 
-def desenhaProjecaoIsometrica():
-    pass
+     return listaP
 
-def desenhaProjecaoObliqua():
-    pass
 
-def desenhaTranslacao():
-    pass
+
+
+def trataClick(janela,SE,SD,LP,matOpera):
+    click = janela.getMouse().clone()
+    if (click.getX() > 0):
+        print(click.getX())
+    for i in range(len(LP)):
+        if((click.getX() >= LP[i][0].x) and (LP[i][1].x>=click.getX()) and
+           (click.getY() >= LP[i][0].y) and (LP[i][1].y >= click.getY()) ):
+            pontoAtual = Point(matOpera[i][0] + x0, matOpera[i][1] + y0)
+            pt = Circle(pontoAtual,8)
+            pt.setOutline("black")
+            pt.setFill("yellow")
+            pt.draw(janela)
+            return pt
 
 
 def main():
 
 
-    janela = GraphWin("",800,600)
-    janela.setBackground(color_rgb(255,255,255))
+     janela = GraphWin("",1000,1000)
+     janela.setBackground(color_rgb(255,255,255))
 
 
 
-    resp=True
-    while(resp):
-    # mat=fazRotacaoEmX(matOri,20)
-    # mat = fazRotacaoEmY(mat, 90)
-     mat=montaCabinetModificada(matOri,25)
 
+    # mat=fazRotacaoEmX(matOri,30)
+
+     #mat = fazRotacaoEmY(matOri, 180)
+     #mat=fazProjecaoPespec(matOri)
+     #mat=fazTranslacao(mat)
+     #mat=montaProjecaoParalelaIsometrica(matOri,-45,5)
+     mat=montaProjecaoObliquaCabinet(matOri,75)
      desenhaRetasPassoAPasso(janela,mat)
 
      desenhaPlanosPassoAPasso(janela,mat)
 
+     #desenhaCoordenadasNaTela(janela,matOri)
+     se=desenhaSetaE(janela)
+     sd=desenhaSetaD(janela)
+     co=desenhaCoordenadasNaTela(janela,mat,"C")
+     result=trataClick(janela,se,sd,co,mat)
 
+     resp = True
+     while (resp):
+      time.sleep(2)
+      result.undraw()
+      result = trataClick(janela, se, sd, co, mat)
+     #resp= False
 
-     desenhaSetaE(janela)
-     desenhaSetaD(janela)
-     click = janela.getMouse().clone()
-     if (click.getX() > 0):
-         print(click.getX())
-         resp= False
-
-    janela.close()
+     janela.close()
 
 
 

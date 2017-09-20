@@ -1,4 +1,19 @@
+# -*- coding: utf-8 -*-
+
 import math
+
+
+x0=400
+y0=200
+
+Tx=5
+Ty=6
+Tz=8
+
+Zp=30
+
+pontosPoli=8
+
 
 matOri = [[10, 40, 0, 1], #0
           [10, 100, 0,1], #1
@@ -8,29 +23,14 @@ matOri = [[10, 40, 0, 1], #0
           [210, 40, 0,1],#5
           [140, 0, 0,1],  #6
           [70, 0, 0,1],  #7
-          [10, 40, 30, 1],#8
-          [10, 100, 30, 1],#9
-          [70, 170, 30, 1], #10
-          [140, 170, 30, 1],#11
-          [210, 100, 30, 1],#12
-          [210, 40, 30, 1],#13
-          [140, 0, 30, 1],#14
-          [70, 0, 30, 1]]#15
-x0=300
-y0=200
-
-pontosPoli=8
-
-matProPZ=[[1,0,0,0],
-          [0,1,0,0],
-          [0,0,0,0],
-          [0,0,0,1]]
-
-matProXYUmPontodeFuga=[[1,0,0,0],   # acertar
-                       [0,1,0,0],
-                       [0,0,0,(1/30)*(-1)],
-                       [0,0,0,1]]
-
+          [10, 40, Zp, 1],#8
+          [10, 100, Zp, 1],#9
+          [70, 170, Zp, 1], #10
+          [140, 170, Zp, 1],#11
+          [210, 100, Zp, 1],#12
+          [210, 40, Zp, 1],#13
+          [140, 0, Zp, 1],#14
+          [70, 0, Zp, 1]]#15
 
 
 def multiplicaMatriz(A,B):
@@ -50,6 +50,18 @@ def multiplicaMatriz(A,B):
                 resp[l][c]+=A[l][k]*B[k][c]
 
     return resp
+
+def montaTransposta(A):
+    resp=[]
+    for i in range (len(A[0])):
+        resp.append([" "]*len(A))
+
+    for i in range(len(A[0])):
+        for j in range(len(A)):
+            resp[i][j]=A[j][i]
+
+    return resp
+# Montar a matriz MISO unindo as duas rotacoes abaixo Resolve ( Projecao paralela Isometrica )-----------------------------------------
 
 def fazRotacaoEmX(mat,angulo):
 
@@ -78,11 +90,54 @@ def fazRotacaoEmZ(mat,angulo):
 
     return multiplicaMatriz(mat, matRotZ)
 
-def montaCabinetModificada(mat,angulo):
+def montaMatrizMISO(Ox,Oy):
 
-    matCab = [[1, 0, 0, 0],  # acertar
+    matRotX = [ [1, 0, 0, 0],
+                [0, math.cos(Ox), math.sin(Ox), 0],
+                [0, math.sin(Ox)*(-1),math.cos(Ox), 0],
+                [0, 0, 0, 1]]
+
+    matRotY = [[math.cos(Oy), 0, math.sin(Oy) * (-1), 0],
+               [0, 1, 0, 0],
+               [math.sin(Oy), 0, math.cos(Oy), 0],
+               [0, 0, 0, 1]]
+
+    return multiplicaMatriz(matRotX,matRotY)
+
+def montaProjecaoParalelaIsometrica(mat,Ox,Oy):
+
+    matMISO=montaMatrizMISO(Ox,Oy)
+
+    return multiplicaMatriz(mat,matMISO)
+
+# --------------------------------------------------------------------------------------------------
+
+
+# Projecao Obliqua Cabinet  ----------------------------------------------------
+
+def montaProjecaoObliquaCabinet(mat,angulo):
+
+    matCab = [                 [1, 0, 0, 0],  # acertar
                                [0, 1, 0, 0],
-                               [30*math.cos(angulo), 30*math.sin(angulo), 0, 0],
+                               [3*math.cos(angulo), 3*math.sin(angulo), 0, 0],
                                [0, 0, 0, 1]]
 
     return multiplicaMatriz(mat, matCab)
+
+
+# falta so acertar a pespectiva  -------------------------------------------------------------------------
+
+def fazProjecaoPespec(mat):
+
+    aux = montaTransposta(mat)
+
+    matPespec = [      [1,0,0,0],   # acertar
+                       [0,1,0,0],
+                       [0,0,0,(1/Zp)*(-1)],
+                       [0,0,0,1]]
+
+    aux = multiplicaMatriz(matPespec,aux)
+    print(mat)
+    aux=montaTransposta(aux)
+    print(aux)
+    return (aux)
