@@ -4,13 +4,14 @@ import math
 
 
 x0=400
-y0=200
+y0=350
 
 Tx=5
 Ty=6
 Tz=8
 
-Zp=30
+Zp=60
+Zpc=150
 
 pontosPoli=8
 
@@ -119,7 +120,7 @@ def montaProjecaoObliquaCabinet(mat,angulo):
 
     matCab = [                 [1, 0, 0, 0],  # acertar
                                [0, 1, 0, 0],
-                               [3*math.cos(angulo), 3*math.sin(angulo), 0, 0],
+                               [1*math.cos(angulo), 1*math.sin(angulo), 0, 0],
                                [0, 0, 0, 1]]
 
     return multiplicaMatriz(mat, matCab)
@@ -133,11 +134,9 @@ def fazProjecaoPespec(mat):
 
     matPespec = [      [1,0,0,0],   # acertar
                        [0,1,0,0],
-                       [0,0,0,(1/Zp)*(-1)],
+                       [0,0,0,(1/Zpc)*(-1)],
                        [0,0,0,1]]
 
     aux = multiplicaMatriz(matPespec,aux)
-    print(mat)
     aux=montaTransposta(aux)
-    print(aux)
     return (aux)

@@ -13,26 +13,19 @@ def desenhaPontos(janela):
 
 
 def desenhaSetaE(janela):
-    setaE = Polygon(Point(100, 60), Point(130, 40), Point(100, 20))
+    setaE = Rectangle(Point(100, 60), Point(130, 40))
     setaE.setFill("blue")
     setaE.draw(janela)
-    #click=janela.getMouse().clone()
-    #if(click.getX() > 0):
-    #    print(click.getX())
-     #   setaE.undraw()
-     #   return False
+
     return setaE
 
 def desenhaSetaD(janela):
-    setaD = Polygon(Point(70, 60), Point(40, 40), Point(70, 20))
+    setaD = Rectangle(Point(70, 60), Point(40, 40))
     setaD.setFill("blue")
     setaD.draw(janela)
-    #click=janela.getMouse().clone()
-    #if(click.getX() > 0):
-       # print(click.getX())
-      #  setaE.undraw()
-      #  return False
+
     return setaD
+
 
 def desenhaPontoPassoAPasso():
     pass
@@ -148,7 +141,7 @@ def desenhaPlanosPassoAPasso(janela,matOpera):
 
 
 
-def desenhaCoordenadasNaTela(janela,matOpera,tipo):
+def desenhaCoordenadasNaTela(janela,matOpera):
 
 
      dx= 4
@@ -168,11 +161,7 @@ def desenhaCoordenadasNaTela(janela,matOpera,tipo):
 
 
 
-       if(tipo=="C"):
-         # desenha o valor dos pontos ao lado do quadrado
-           frase = " (" + str(float(round(matOpera[i][0]))) +"," + str(float(round(matOpera[i][1])*(-1))) + " )"
-       else:
-           frase = " (" + str(float(round(matOpera[i][0]))) + "," + str(float(round(matOpera[i][1]))) + " )"
+       frase = " (" + str(float(round(matOpera[i][0]))) +"," + str(float(round(matOpera[i][1])*(-1))) + " )"
        texto=Text(Point(quadrado.getP2().x+50, dy+10),frase )
        texto.setFill("Black")
        texto.draw(janela)
@@ -184,10 +173,9 @@ def desenhaCoordenadasNaTela(janela,matOpera,tipo):
 
 
 
-def trataClick(janela,SE,SD,LP,matOpera):
+def trataClick(janela,LP,matOpera):
     click = janela.getMouse().clone()
-    if (click.getX() > 0):
-        print(click.getX())
+    ant=Rectangle(Point(-1,-1),Point(0,0))
     for i in range(len(LP)):
         if((click.getX() >= LP[i][0].x) and (LP[i][1].x>=click.getX()) and
            (click.getY() >= LP[i][0].y) and (LP[i][1].y >= click.getY()) ):
@@ -199,38 +187,79 @@ def trataClick(janela,SE,SD,LP,matOpera):
             return pt
 
 
+    ant.draw(janela)
+    return ant
+
+
 def main():
 
 
      janela = GraphWin("",1000,1000)
      janela.setBackground(color_rgb(255,255,255))
 
+     mat = montaProjecaoParalelaIsometrica(matOri, -10, 2)
+
+     titulo = Text(Point(500, 30), "Projeção Isometrica")
+     titulo.setSize(30)
+     titulo.setFill("Black")
+     titulo.draw(janela)
+
+     desenhaRetasPassoAPasso(janela, mat)
+     desenhaPlanosPassoAPasso(janela, mat)
 
 
-
-    # mat=fazRotacaoEmX(matOri,30)
-
-     #mat = fazRotacaoEmY(matOri, 180)
-     #mat=fazProjecaoPespec(matOri)
-     #mat=fazTranslacao(mat)
-     #mat=montaProjecaoParalelaIsometrica(matOri,-45,5)
-     mat=montaProjecaoObliquaCabinet(matOri,75)
-     desenhaRetasPassoAPasso(janela,mat)
-
-     desenhaPlanosPassoAPasso(janela,mat)
-
-     #desenhaCoordenadasNaTela(janela,matOri)
-     se=desenhaSetaE(janela)
-     sd=desenhaSetaD(janela)
-     co=desenhaCoordenadasNaTela(janela,mat,"C")
-     result=trataClick(janela,se,sd,co,mat)
-
+     co = desenhaCoordenadasNaTela(janela, mat)
      resp = True
      while (resp):
-      time.sleep(2)
-      result.undraw()
-      result = trataClick(janela, se, sd, co, mat)
-     #resp= False
+        result = trataClick(janela, co, mat)
+        if(result.getP1().x==-1):
+           resp=False
+        time.sleep(1)
+        result.undraw()
+
+     janela.delete("all")
+
+     mat = montaProjecaoObliquaCabinet(matOri,75)
+
+     titulo = Text(Point(500, 30), "Projeção Oblíqua -- Cabinet")
+     titulo.setSize(30)
+     titulo.setFill("Black")
+     titulo.draw(janela)
+
+     desenhaRetasPassoAPasso(janela, mat)
+     desenhaPlanosPassoAPasso(janela, mat)
+
+
+     co = desenhaCoordenadasNaTela(janela, mat)
+     resp = True
+     while (resp):
+        result = trataClick(janela, co, mat)
+        if (result.getP1().x == -1):
+            resp = False
+        time.sleep(1)
+        result.undraw()
+
+     janela.delete("all")
+
+     mat= fazProjecaoPespec(matOri)
+
+     titulo = Text(Point(500, 30), "Projeção Em Pespectiva")
+     titulo.setSize(30)
+     titulo.setFill("Black")
+     titulo.draw(janela)
+
+     desenhaRetasPassoAPasso(janela, mat)
+     desenhaPlanosPassoAPasso(janela, mat)
+
+
+     co = desenhaCoordenadasNaTela(janela, mat)
+     resp = True
+     while (resp):
+          result = trataClick(janela, co, mat)
+          if (result.getP1().x == -1):
+              resp = False
+          time.sleep(1)
+          result.undraw()
 
      janela.close()
 
