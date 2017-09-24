@@ -34,6 +34,8 @@ matOri = [[10, 40, 0, 1], #0
           [70, 0, Zp, 1]]#15
 
 
+
+
 def multiplicaMatriz(A,B):
     linhaA=len(A)
     colunaA=len(A[0])
@@ -130,13 +132,14 @@ def montaProjecaoObliquaCabinet(mat,angulo):
 
 def fazProjecaoPespec(mat):
 
-    aux = montaTransposta(mat)
+    aux = mat
 
-    matPespec = [      [1,0,0,0],   # acertar
-                       [0,1,0,0],
-                       [0,0,0,(1/Zpc)*(-1)],
-                       [0,0,0,1]]
+    matPespec = [      [0.5,0,0,0],   # acertar
+                       [0,0.5,0,0],
+                       [0,0,0,0],
+                       [0,0,1,0.5]]
 
-    aux = multiplicaMatriz(matPespec,aux)
-    aux=montaTransposta(aux)
+    aux[8:] = multiplicaMatriz(mat[8:],matPespec)
+
+    #aux=montaTransposta(aux)
     return (aux)

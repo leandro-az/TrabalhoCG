@@ -196,10 +196,10 @@ def main():
 
      janela = GraphWin("",1000,1000)
      janela.setBackground(color_rgb(255,255,255))
-
+    
      mat = montaProjecaoParalelaIsometrica(matOri, -10, 2)
 
-     titulo = Text(Point(500, 30), "Projeção Isometrica")
+     titulo = Text(Point(500, 30), "Projeção Isométrica")
      titulo.setSize(30)
      titulo.setFill("Black")
      titulo.draw(janela)
@@ -241,14 +241,19 @@ def main():
 
      janela.delete("all")
 
-     mat= fazProjecaoPespec(matOri)
 
-     titulo = Text(Point(500, 30), "Projeção Em Pespectiva")
+     mat= fazProjecaoPespec(matOri)
+     print(mat)
+
+     titulo = Text(Point(500, 30), "Projeção Em Pespectiva -- 1PF")
      titulo.setSize(30)
      titulo.setFill("Black")
      titulo.draw(janela)
 
+
      desenhaRetasPassoAPasso(janela, mat)
+
+
      desenhaPlanosPassoAPasso(janela, mat)
 
 
