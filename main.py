@@ -196,8 +196,9 @@ def main():
 
      janela = GraphWin("",1000,1000)
      janela.setBackground(color_rgb(255,255,255))
+     print(matOri)
     
-     mat = montaProjecaoParalelaIsometrica(matOri, -10, 2)
+     mat = montaProjecaoParalelaIsometrica(matOri, -35.26,45)
 
      titulo = Text(Point(500, 30), "Projeção Isométrica")
      titulo.setSize(30)
@@ -214,12 +215,12 @@ def main():
         result = trataClick(janela, co, mat)
         if(result.getP1().x==-1):
            resp=False
-        time.sleep(1)
+        time.sleep(1.5)
         result.undraw()
 
      janela.delete("all")
 
-     mat = montaProjecaoObliquaCabinet(matOri,75)
+     mat = montaProjecaoObliquaCabinet(matOri,25)
 
      titulo = Text(Point(500, 30), "Projeção Oblíqua -- Cabinet")
      titulo.setSize(30)
@@ -236,7 +237,7 @@ def main():
         result = trataClick(janela, co, mat)
         if (result.getP1().x == -1):
             resp = False
-        time.sleep(1)
+        time.sleep(1.5)
         result.undraw()
 
      janela.delete("all")
@@ -263,7 +264,7 @@ def main():
           result = trataClick(janela, co, mat)
           if (result.getP1().x == -1):
               resp = False
-          time.sleep(1)
+          time.sleep(1.5)
           result.undraw()
 
      janela.close()

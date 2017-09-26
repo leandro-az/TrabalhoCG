@@ -10,7 +10,7 @@ Tx=5
 Ty=6
 Tz=8
 
-Zp=60
+Zp=130
 Zpc=150
 
 pontosPoli=8
@@ -69,17 +69,17 @@ def montaTransposta(A):
 def fazRotacaoEmX(mat,angulo):
 
     matRotX = [ [1, 0, 0, 0],
-                [0, math.cos(angulo), math.sin(angulo), 0],
-                [0, math.sin(angulo)*(-1),math.cos(angulo), 0],
+                [0, math.cos(angulo*math.pi/180), math.sin(angulo*math.pi/180), 0],
+                [0, math.sin(angulo*math.pi/180)*(-1),math.cos(angulo*math.pi/180), 0],
                 [0, 0, 0, 1]]
 
     return multiplicaMatriz(mat,matRotX)
 
 def fazRotacaoEmY(mat,angulo):
 
-    matRotY = [[math.cos(angulo),0,math.sin(angulo)*(-1),0],
+    matRotY = [[math.cos(angulo*math.pi/180),0,math.sin(angulo*math.pi/180)*(-1),0],
                [0,1,0,0],
-               [math.sin(angulo),0,math.cos(angulo),0],
+               [math.sin(angulo*math.pi/180),0,math.cos(angulo*math.pi/180),0],
                [0,0,0,1]]
 
     return multiplicaMatriz(mat, matRotY)
@@ -96,13 +96,13 @@ def fazRotacaoEmZ(mat,angulo):
 def montaMatrizMISO(Ox,Oy):
 
     matRotX = [ [1, 0, 0, 0],
-                [0, math.cos(Ox), math.sin(Ox), 0],
-                [0, math.sin(Ox)*(-1),math.cos(Ox), 0],
+                [0, math.cos(Ox*math.pi/180), math.sin(Ox*math.pi/180), 0],
+                [0, math.sin(Ox*math.pi/180)*(-1),math.cos(Ox*math.pi/180), 0],
                 [0, 0, 0, 1]]
 
-    matRotY = [[math.cos(Oy), 0, math.sin(Oy) * (-1), 0],
+    matRotY = [[math.cos(Oy*math.pi/180), 0, math.sin(Oy*math.pi/180) * (-1), 0],
                [0, 1, 0, 0],
-               [math.sin(Oy), 0, math.cos(Oy), 0],
+               [math.sin(Oy*math.pi/180), 0, math.cos(Oy*math.pi/180), 0],
                [0, 0, 0, 1]]
 
     return multiplicaMatriz(matRotX,matRotY)
@@ -119,13 +119,13 @@ def montaProjecaoParalelaIsometrica(mat,Ox,Oy):
 # Projecao Obliqua Cabinet  ----------------------------------------------------
 
 def montaProjecaoObliquaCabinet(mat,angulo):
-
-    matCab = [                 [1, 0, 0, 0],  # acertar
-                               [0, 1, 0, 0],
-                               [1*math.cos(angulo), 1*math.sin(angulo), 0, 0],
+    aux=mat
+    matCab = [                 [1, 0,0, 0],  # acertar
+                               [0, 1 , 0, 0],
+                               [0.5*math.cos(angulo*(math.pi/180)),  0.5*math.sin(angulo*(math.pi/180)), 0, 0],
                                [0, 0, 0, 1]]
-
-    return multiplicaMatriz(mat, matCab)
+    aux[8:]=multiplicaMatriz(aux[8:],matCab)
+    return aux
 
 
 # falta so acertar a pespectiva  -------------------------------------------------------------------------
@@ -134,12 +134,18 @@ def fazProjecaoPespec(mat):
 
     aux = mat
 
-    matPespec = [      [0.5,0,0,0],   # acertar
+    matPespec = [      [0.5,0,0,0],
                        [0,0.5,0,0],
                        [0,0,0,0],
                        [0,0,1,0.5]]
+    '''
+    matPespec2 = [[1, 0, 0, 0],
+                 [0, 1, 0, 0],
+                 [-1/Zpc, -1/Zpc,0, 0],
+                 [0, 0, 0, 1]]
 
+    '''
     aux[8:] = multiplicaMatriz(mat[8:],matPespec)
 
-    #aux=montaTransposta(aux)
+
     return (aux)
