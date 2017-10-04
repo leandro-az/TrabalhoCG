@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
-
+from __future__ import division
 import math
 
-
-x0=400
-y0=350
 
 Tx=5
 Ty=6
@@ -66,6 +63,17 @@ def montaTransposta(A):
     return resp
 # Montar a matriz MISO unindo as duas rotacoes abaixo Resolve ( Projecao paralela Isometrica )-----------------------------------------
 
+def fazTranslacao(mat):
+
+    matTransl = [ [1, 0, 0, 400],
+                 [0, 1, 0, 300],
+                 [0, 0, 1, 0],
+                 [0, 0, 0, 1]]
+    aux= montaTransposta(matTransl)
+
+    return multiplicaMatriz(mat,aux)
+
+
 def fazRotacaoEmX(mat,angulo):
 
     matRotX = [ [1, 0, 0, 0],
@@ -120,10 +128,13 @@ def montaProjecaoParalelaIsometrica(mat,Ox,Oy):
 
 def montaProjecaoObliquaCabinet(mat,angulo):
     aux=mat
+    angulo=angulo*(math.pi/180)
+    print(angulo)
     matCab = [                 [1, 0,0, 0],  # acertar
                                [0, 1 , 0, 0],
-                               [0.5*math.cos(angulo*(math.pi/180)),  0.5*math.sin(angulo*(math.pi/180)), 0, 0],
+                               [0.5*math.cos(angulo),  0.5*math.sin(angulo), 0, 0],
                                [0, 0, 0, 1]]
+
     aux[8:]=multiplicaMatriz(aux[8:],matCab)
     return aux
 
@@ -131,21 +142,27 @@ def montaProjecaoObliquaCabinet(mat,angulo):
 # falta so acertar a pespectiva  -------------------------------------------------------------------------
 
 def fazProjecaoPespec(mat):
+    matPespec = [      [1,0,0,0],
+                       [0,1,0,0],
+                       [0,0,0,(1/Zpc)],
+                       [0,0,0,1]]
 
-    aux = mat
+    matPespec=montaTransposta(matPespec)
 
-    matPespec = [      [0.5,0,0,0],
-                       [0,0.5,0,0],
-                       [0,0,0,0],
-                       [0,0,1,0.5]]
-    '''
-    matPespec2 = [[1, 0, 0, 0],
-                 [0, 1, 0, 0],
-                 [-1/Zpc, -1/Zpc,0, 0],
-                 [0, 0, 0, 1]]
+    mat=montaTransposta(mat)
 
-    '''
-    aux[8:] = multiplicaMatriz(mat[8:],matPespec)
+    mat=multiplicaMatriz(matPespec,mat)
+
+    mat=montaTransposta(mat)
 
 
-    return (aux)
+    for i in range(8,len(mat)):
+        mat[i][0] = mat[i][0]/ mat[i][3]
+        mat[i][1] = mat[i][1] / mat[i][3]
+        mat[i][2] = mat[i][2] / mat[i][3]
+        mat[i][3] = mat[i][3] / mat[i][3]
+
+
+
+    return mat
+
