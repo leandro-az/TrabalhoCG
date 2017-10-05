@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import division
+
 from graphics import *
 from estruturas import *
 import random, time, decimal
@@ -169,6 +169,7 @@ def trataClick(janela,LP,matOpera):
 
 def main():
 
+     copiaMat=multiplicaMatriz(matOri,matIdent)
 
      janela = GraphWin("",1000,1000)
      janela.setBackground(color_rgb(255,255,255))
@@ -221,8 +222,11 @@ def main():
      janela.delete("all")
 
 
-     mat= fazProjecaoPespec(matOri)
+     print(copiaMat)
+     mat= fazProjecaoPespec(copiaMat)
      mat = fazTranslacao(mat)
+     print(mat)
+
 
      titulo = Text(Point(500, 30), "Projeção Em Pespectiva -- 1PF")
      titulo.setSize(30)

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
-import math
+import math,random, time, decimal
 
 
 Tx=5
@@ -31,6 +31,10 @@ matOri = [[10, 40, 0, 1], #0
           [70, 0, Zp, 1]]#15
 
 
+matIdent = [           [1,0,0,0],
+                       [0,1,0,0],
+                       [0,0,1,0],
+                       [0,0,0,1]]
 
 
 def multiplicaMatriz(A,B):
@@ -149,20 +153,20 @@ def fazProjecaoPespec(mat):
 
     matPespec=montaTransposta(matPespec)
 
-    mat=montaTransposta(mat)
+    aux=montaTransposta(mat)
 
-    mat=multiplicaMatriz(matPespec,mat)
+    aux=multiplicaMatriz(matPespec,aux)
 
-    mat=montaTransposta(mat)
-
-
-    for i in range(8,len(mat)):
-        mat[i][0] = mat[i][0]/ mat[i][3]
-        mat[i][1] = mat[i][1] / mat[i][3]
-        mat[i][2] = mat[i][2] / mat[i][3]
-        mat[i][3] = mat[i][3] / mat[i][3]
+    aux=montaTransposta(aux)
 
 
+    for i in range(len(mat)):
+        aux[i][0] = abs(aux[i][0]/ aux[i][3])
+        aux[i][1] = abs(aux[i][1] / aux[i][3])
+        aux[i][2] = abs(aux[i][2] / aux[i][3])
+        aux[i][3] = abs(aux[i][3] / aux[i][3])
 
-    return mat
+
+
+    return aux
 
